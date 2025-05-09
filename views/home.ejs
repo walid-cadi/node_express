@@ -19,5 +19,14 @@
       <input type="text" name="name" placeholder="Enter your name" required />
       <button type="submit">Submit</button>
     </form>
+    <% if ( users && Array.isArray(users)) { %>
+    <ul>
+      <% users.map(user => { %>
+      <li><%= user.name %></li>
+      <% }) %>
+    </ul>
+    <% } else { %>
+    <p>No users available</p>
+    <% } %>
   </body>
 </html>

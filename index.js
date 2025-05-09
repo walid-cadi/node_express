@@ -4,9 +4,20 @@ const port = 3000;
 const mongoose = require("mongoose");
 app.use(express.urlencoded({ extended: true }));
 const User = require("./models/userSchema");
+app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.sendFile("./view/home.html", { root: __dirname });
+  User.find()
+    .then((result) => {
+      res.render("home", { users: result });
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+app.get("/index.html", (req, res) => {
+  res.send("<h1>data sent successfuly</h1>");
 });
 
 // app.listen(port, () => {
@@ -31,7 +42,7 @@ app.post("/", (req, res) => {
   user
     .save()
     .then(() => {
-      res.redirect("/");
+      res.redirect("/index.html");
     })
     .catch((err) => {
       console.log(err);
