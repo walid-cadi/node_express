@@ -27,8 +27,7 @@ app.get("/", (req, res) => {
   // result ==> array of objects
   User.find()
     .then((result) => {
-      res.render("index", { users: result });
-      console.log(result);
+      res.render("index", { users: result, currentPage: "index" });
     })
     .catch((err) => {
       console.log(err);
@@ -37,16 +36,24 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user/add.html", (req, res) => {
-  res.render("user/add");
-});
-
-app.get("/user/view.html", (req, res) => {
-  res.render("user/view");
+  res.render("user/add", { currentPage: "add" });
 });
 
 app.get("/user/edit.html", (req, res) => {
   res.render("user/edit");
 });
+
+// view user
+app.get("/user/:id", (req, res) => {
+  User.findById(req.params.id).then((result) => {
+    res.render("user/view", { user: result });
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send("Error retrieving user");
+  }
+  );
+});
+
 
 // post request
 app.post("/user/add", (req, res) => {
