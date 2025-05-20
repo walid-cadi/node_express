@@ -9,7 +9,7 @@ app.use(express.static("public"));
 var moment = require("moment"); // require
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
-
+const country_list = require("./views/components/country");
 // Auto refresh
 const path = require("path");
 const livereload = require("livereload");
@@ -43,13 +43,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user/add.html", (req, res) => {
-  res.render("user/add", { currentPage: "add" });
+  res.render("user/add", { currentPage: "add" , country_list: country_list });
 });
 
 app.get("/edit/:id", (req, res) => {
   User.findById(req.params.id)
     .then((result) => {
-      res.render("user/edit", { user: result, moment: moment });
+      res.render("user/edit", { user: result, moment: moment , country_list: country_list });
     })
     .catch((err) => {
       console.log(err);
@@ -95,7 +95,6 @@ app.post("/user/add", (req, res) => {
 
 // delete user
 app.delete("/delete/:id", (req, res) => {
-  console.log(req.params.id);
   User.findByIdAndDelete(req.params.id)
     .then(() => {
       res.redirect("/");
