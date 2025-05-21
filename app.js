@@ -43,13 +43,17 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user/add.html", (req, res) => {
-  res.render("user/add", { currentPage: "add" , country_list: country_list });
+  res.render("user/add", { currentPage: "add", country_list: country_list });
 });
 
 app.get("/edit/:id", (req, res) => {
   User.findById(req.params.id)
     .then((result) => {
-      res.render("user/edit", { user: result, moment: moment , country_list: country_list });
+      res.render("user/edit", {
+        user: result,
+        moment: moment,
+        country_list: country_list,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -102,6 +106,18 @@ app.delete("/delete/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(500).send("Error deleting user");
+    });
+});
+
+// update user
+app.put("/update/:id", (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Error updating user");
     });
 });
 
