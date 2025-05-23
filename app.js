@@ -121,6 +121,26 @@ app.put("/update/:id", (req, res) => {
     });
 });
 
+// query
+app.post("/search", (req, res) => {
+  const search = req.body.search.trim();
+
+  User.find({
+    $or: [{ firstName: search }, { lastName: search }],
+  })
+    .then((result) => {
+      console.log(result);
+      res.render("./user/search", {
+        users: result,
+        moment: moment,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Error retrieving users");
+    });
+});
+
 mongoose
   .connect(
     "mongodb+srv://cadiwalid440:b0fBU7GKr1LgqmjP@cluster0.mxg1loi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
